@@ -8,10 +8,21 @@ process.env.PORT = 8000;
 process.env.DB_PATH = "mongodb://localhost:27017";
 const mongoose = require("mongoose");
 const app = express();
+const jwt = require("jsonwebtoken");
+const token = jwt.sign({"david":"cool"}, "password123");
+console.log(token);
+const decoded = jwt.verify(token, "password123");
+console.log(decoded);
+const password = "platypus6";
 
 app.use(cors({origin: true, optionsSuccessStatus: 200, credentials: true}));
 app.use(express.json());
 app.use(express.static(process.env.BUILD_PATH));
+
+app.use((req, res, next) => {
+  console.log('Time:', Date.now())
+  next()
+})
 
 app.listen(process.env.PORT, () => {
   console.log(`Started server on port ${process.env.PORT}`.bold.red);
